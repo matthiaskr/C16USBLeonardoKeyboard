@@ -5,9 +5,9 @@
 
 #define ROWS 8
 #define COLS 8
-#define KEYS (ROWS * COLS)
 
-extern uint8_t row_pins[ROWS];
-extern uint8_t col_pins[COLS];
+void matrix_init(void);
+
+void matrix_check(void);
 
 #endif
