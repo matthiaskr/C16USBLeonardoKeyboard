@@ -9,6 +9,8 @@ void setup() {
   usbkeysim_init();
   mouse_init();
   matrix_init();
+  pinMode(13, OUTPUT);
+  digitalWrite(13, HIGH);
 }
 
 void loop() {
