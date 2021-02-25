@@ -1,5 +1,7 @@
 #include "usbkeysim.h"
 
+#include "usb_hid_keys.h"
+
 #include <stdbool.h>
 
 #ifndef _USING_HID
@@ -31,19 +33,14 @@ static const uint8_t hid_descr[] PROGMEM = {
   0x95, REPORT_COUNT,            //   REPORT_COUNT (6)
     0x75, 0x08,                    //   REPORT_SIZE (8)
     0x15, 0x00,                    //   LOGICAL_MINIMUM (0)
-    0x25, 0x7f,                    //   LOGICAL_MAXIMUM (127)
+    0x25, 0xff,                    //   LOGICAL_MAXIMUM (255)
     0x05, 0x07,                    //   USAGE_PAGE (Keyboard)
     
   0x19, 0x00,                    //   USAGE_MINIMUM (Reserved (no event indicated))
-    0x29, 0x73,                    //   USAGE_MAXIMUM (Keyboard Application)
+    0x29, 0xff,                    //   USAGE_MAXIMUM (Keyboard Application)
     0x81, 0x00,                    //   INPUT (Data,Ary,Abs)
     0xc0,                          // END_COLLECTION
 };
-
-USBKeySimClass::USBKeySimClass(void) {
-  static HIDSubDescriptor node(hid_descr, sizeof(hid_descr));
-  HID().AppendDescriptor(&node);
-}
 
 struct {
   uint8_t modifiers;
@@ -57,7 +54,7 @@ void usbkeysim_init(void) {
 }
 
 static void send_report(void) {
-  HID().SendReport(2, report, sizeof(report));
+  HID().SendReport(2, &report, sizeof(report));
 }
 
 static inline bool is_modifier(uint8_t key) {
@@ -131,7 +128,7 @@ void usbkeysim_release_nonmod(void) {
   bool should_send = false;
 
   for (int i=0; i<REPORT_COUNT; i++) {
-    should_send ||= report.keys[i] != 0;
+    should_send = should_send || (report.keys[i] != 0);
     report.keys[i] = 0;
   }
 

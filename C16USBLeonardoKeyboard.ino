@@ -8,7 +8,7 @@
 void setup() {
   usbkeysim_init();
   mouse_init();
-  matrix_setup();
+  matrix_init();
 }
 
 void loop() {
