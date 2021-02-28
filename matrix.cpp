@@ -4,7 +4,7 @@
 
 #include <Arduino.h>
 
-#define DEBOUNCE_DELAY 50
+#define DEBOUNCE_DELAY 25
 
 // row pins on C16:               6,  8, 12, 11, 13,  1, 16, 19
 static uint8_t row_pins[ROWS] = {A2, A0,  5,  4,  6, A4,  9, 12};
