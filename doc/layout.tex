@@ -1,0 +1,26 @@
+\documentclass[a4paper,english]{article}
+\usepackage{a4wide,babel}
+\usepackage[utf8]{inputenc}
+\def\keybox#1#2#3#4#5{\put(#1,#2){\framebox(#3,#4){\sffamily\vphantom{pÜ}#5}}}
+\begin{document}
+
+\unitlength 0.0075cm
+
+\section*{Original}
+\input{original}
+
+\section*{Chosen Layout}
+
+Multi-layer layout.  Layers are changed by pressing \textsf{EL} (Extra Layer
+modifier) and \textsf{ML} (Mouse Layer modifier).
+
+\subsection*{Normal Layer}
+\input{normal-layer.tex}
+
+\subsection*{Extra Layer}
+\input{extra-layer.tex}
+
+\subsection*{Mouse Layer}
+\input{mouse-layer.tex}
+
+\end{document}
