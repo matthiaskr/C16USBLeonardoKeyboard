@@ -15,5 +15,6 @@ void setup() {
 
 void loop() {
   matrix_check();
+  usbkeysim_send_report();
   mouse_move_action();
 }

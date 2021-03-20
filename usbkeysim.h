@@ -15,4 +15,6 @@ void usbkeysim_release(uint8_t key);
 
 void usbkeysim_release_nonmod(void);
 
+void usbkeysim_send_report(void);
+
 #endif
