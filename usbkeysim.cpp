@@ -10,7 +10,7 @@
 
 #define REPORT_COUNT 6
 
-#define DEBOUNCE_DELAY 50
+#define REPEATED_REPORTS 3
 
 static const uint8_t hid_descr[] PROGMEM = {
   //  Keyboard
@@ -50,8 +50,7 @@ static struct {
   uint8_t keys[REPORT_COUNT];
 } report = {0, 0, {0, 0, 0, 0, 0, 0}};
 
-static bool do_send_report = false;
-static unsigned long last_report_millis = 0;
+static int do_send_report = 0;
 
 void usbkeysim_init(void) {
   static HIDSubDescriptor node(hid_descr, sizeof(hid_descr));
@@ -59,18 +58,14 @@ void usbkeysim_init(void) {
 }
 
 void usbkeysim_send_report(void) {
-  if (do_send_report) {
-    const unsigned long now = millis();
-    if (last_report_millis + DEBOUNCE_DELAY < now) {
-      HID().SendReport(2, &report, sizeof(report));
-      last_report_millis = now;
-      do_send_report = false;
-    }
+  if (do_send_report > 0) {
+    HID().SendReport(2, &report, sizeof(report));
+    do_send_report--;
   }
 }
 
 static void send_report(void) {
-  do_send_report = true;
+  do_send_report = REPEATED_REPORTS;
 }
 
 static inline bool is_modifier(uint8_t key) {
