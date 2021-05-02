@@ -8,9 +8,9 @@
 static bool mouse_move[6] = {false, false, false, false, false, false};
 #define MOUSE_MOVE_NOS (sizeof(mouse_move) / sizeof(bool))
 
-static const int mouse_accels[] = {1, 2, 5, 10, 20, 40};
+static const int mouse_accels[] = {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 5, 5, 5, 5, 5, 5, 10, 10, 10, 10, 15, 15, 15, 20};
 #define MOUSE_ACCELS (sizeof(mouse_accels) / sizeof(int))
-static int cur_accel = 3;
+static int cur_accel = 0;
 
 void mousemove_press(int kind) {
   mouse_move[kind] = true;
@@ -50,27 +50,28 @@ void mouse_move_action(void) {
   const unsigned long now = millis();
 
   if ((now - last_millis) > DEBOUNCE_DELAY) {
-    int up_down = mouse_move[MOUSEMOVE_DOWN] - mouse_move[MOUSEMOVE_UP];
-    int left_right = mouse_move[MOUSEMOVE_RIGHT] - mouse_move[MOUSEMOVE_LEFT];
-    int wheel = mouse_move[MOUSEWHEEL_UP] - mouse_move[MOUSEWHEEL_DOWN];
+    bool should_move = false;
+    for (int i=0; !should_move && i<6; i++) {
+      should_move = mouse_move[i];
+    }
+  
+    if (should_move) {
+      int up_down = mouse_move[MOUSEMOVE_DOWN] - mouse_move[MOUSEMOVE_UP];
+      int left_right = mouse_move[MOUSEMOVE_RIGHT] - mouse_move[MOUSEMOVE_LEFT];
+      int wheel = mouse_move[MOUSEWHEEL_UP] - mouse_move[MOUSEWHEEL_DOWN];
 
-    const int accel = mouse_accels[cur_accel];
+      const int accel = mouse_accels[cur_accel];
 
-    Mouse.move(left_right * accel, up_down * accel, wheel);
+      Mouse.move(left_right * accel, up_down * accel, wheel);
 
+      if (cur_accel < MOUSE_ACCELS - 1) {
+        cur_accel++;
+      }
+    } else {
+      cur_accel = 0;
+    }
+  
     last_millis = now;
-  }
-}
-
-void mouse_increase_accel(void) {
-  if (cur_accel < MOUSE_ACCELS - 1) {
-    cur_accel++;
-  }
-}
-
-void mouse_decrease_accel(void) {
-  if (cur_accel > 0) {
-    cur_accel--;
   }
 }
 

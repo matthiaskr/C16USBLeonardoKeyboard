@@ -17,9 +17,7 @@
 #define MOUSE_BUTTON1     (MOUSE_CODES_FIRST + 6)
 #define MOUSE_BUTTON2     (MOUSE_BUTTON1 + 1)
 #define MOUSE_BUTTON3     (MOUSE_BUTTON2 + 1)
-#define MOUSE_ACCEL_UP    (MOUSE_BUTTON3 + 1)
-#define MOUSE_ACCEL_DOWN  (MOUSE_ACCEL_UP + 1)
-#define MOUSE_CODES_LAST  MOUSE_ACCEL_DOWN
+#define MOUSE_CODES_LAST  MOUSE_BUTTON3
 
 #define MOD_CODES_FIRST (MOUSE_CODES_LAST + 1)
 #define LAYER_MOD       MOD_CODES_FIRST
@@ -56,7 +54,7 @@ uint8_t keymaps[LAYERS][ROWS][COLS] = {
     { 0, 0, 0, 0, MOUSE_BUTTON2, MOUSE_KEY_LEFT, 0, 0 },
     { 0, 0, MOUSE_KEY_DOWN, 0, MOUSE_BUTTON3, MOUSE_KEY_UP, 0, 0 },
     { MOUSE_KEY_DOWN, 0, MOUSE_KEY_RIGHT, 0, 0, 0, MOUSE_WHEEL_DOWN, MOUSE_KEY_UP },
-    { MOUSE_KEY_LEFT, MOUSE_ACCEL_DOWN, MOUSE_ACCEL_UP, 0, 0, MOUSE_MOD, MOUSE_WHEEL_UP, MOUSE_KEY_RIGHT },
+    { MOUSE_KEY_LEFT, 0, 0, 0, 0, MOUSE_MOD, MOUSE_WHEEL_UP, MOUSE_KEY_RIGHT },
     { 0, 0, KEY_RIGHTALT, 0, MOUSE_BUTTON1, MOUSE_BUTTON2, MOUSE_BUTTON3, 0 }
   },
 };
@@ -84,9 +82,6 @@ void press_key(int row, int col) {
       case MOUSE_BUTTON2: mousebutton_press(MOUSE_MIDDLE); break;
       case MOUSE_BUTTON3: mousebutton_press(MOUSE_KEY_RIGHT); break;
 
-      case MOUSE_ACCEL_UP: mouse_increase_accel(); break;
-      case MOUSE_ACCEL_DOWN: mouse_decrease_accel(); break;
-
       case LAYER_MOD:
       case MOUSE_MOD:
         usbkeysim_release_nonmod();
@@ -109,9 +104,6 @@ void release_key(int row, int col) {
       case MOUSE_BUTTON1: mousebutton_release(MOUSE_LEFT); break;
       case MOUSE_BUTTON2: mousebutton_release(MOUSE_MIDDLE); break;
       case MOUSE_BUTTON3: mousebutton_release(MOUSE_RIGHT); break;
-
-      case MOUSE_ACCEL_UP: break;
-      case MOUSE_ACCEL_DOWN: break;
 
       case LAYER_MOD:
       case MOUSE_MOD:

@@ -24,8 +24,4 @@ void mouse_release_all(void);
 
 void mouse_move_action(void);
 
-void mouse_increase_accel(void);
-
-void mouse_decrease_accel(void);
-
 #endif
