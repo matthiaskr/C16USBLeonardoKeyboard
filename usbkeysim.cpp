@@ -135,13 +135,29 @@ void usbkeysim_release(uint8_t key) {
   }
 }
 
-void usbkeysim_release_nonmod(void) {
+static bool release_nonmod(void) {
   bool should_send = false;
 
   for (int i=0; i<REPORT_COUNT; i++) {
     should_send = should_send || (report.keys[i] != 0);
     report.keys[i] = 0;
   }
+
+  return should_send;
+}
+
+void usbkeysim_release_nonmod(void) {
+  bool should_send = release_nonmod();
+
+  if (should_send) {
+    send_report();
+  }
+}
+
+void usbkeysim_release_all(void) {
+  bool should_send = release_nonmod() || report.modifiers != 0;
+
+  report.modifiers = 0;
 
   if (should_send) {
     send_report();
